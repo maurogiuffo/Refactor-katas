@@ -24,7 +24,7 @@ public class GameController : MonoBehaviour
     private float _healAmount = 5;
 
 
-    List<RPGCharacterController> _characters = null;
+    List<NonPlayerCharacterController> _characters = null;
 
 
 
@@ -43,8 +43,8 @@ public class GameController : MonoBehaviour
 
     void Init()
     {
-        var characters = GameObject.FindObjectsOfType<RPGCharacterController>();
-        _characters = new List<RPGCharacterController>(characters);
+        var characters = GameObject.FindObjectsOfType<NonPlayerCharacterController>();
+        _characters = new List<NonPlayerCharacterController>(characters);
 
         
         for (int i = 0; i < _characters.Count; i++)
@@ -73,7 +73,7 @@ public class GameController : MonoBehaviour
                 if (item.Target == null || item.Target.State == Constants.CharacterStates.dead)
                 {
 
-                    RPGCharacterController nearTarget = null;
+                    NonPlayerCharacterController nearTarget = null;
                     foreach (var possibleTarget in _characters)
                     {
                         if (possibleTarget.State == Constants.CharacterStates.alive

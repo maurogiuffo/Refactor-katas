@@ -60,6 +60,8 @@
     <Compile Include="Assets\Scripts\CharacterModelController.cs" />
     <Compile Include="Assets\Scripts\Constants.cs" />
     <Compile Include="Assets\Scripts\GameController.cs" />
+    <Compile Include="Assets\Scripts\NonPlayerCharacterController.cs" />
+    <Compile Include="Assets\Scripts\PlayerCharacterController.cs" />
     <Compile Include="Assets\Scripts\RPGCharacterController.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>E:/Workspace/UnityTest/RPGTest/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
