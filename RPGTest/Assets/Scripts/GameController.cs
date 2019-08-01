@@ -4,8 +4,29 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    [SerializeField]
+    private float _characterVerlocity;
+
+    [SerializeField]
+    private float _meleeAttackDamage = 50;
+
+    [SerializeField]
+    private float _rangedAttackDamage = 5;
+
+
+    [SerializeField]
+    private float _meleeAttackRange = 2;
+
+    [SerializeField]
+    private float _rangedAttackRange = 20;
+
+    [SerializeField]
+    private float _healAmount = 5;
+
 
     List<RPGCharacterController> _characters = null;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -30,11 +51,11 @@ public class GameController : MonoBehaviour
         {
             if(_characters[i].Attacktype == Constants.CharacterAttackTypes.melee)
             {
-                _characters[i].Init(i,2,50,5);
+                _characters[i].Init(i,_meleeAttackRange,_meleeAttackDamage,_healAmount, _characterVerlocity);
             }
             else
             {
-                _characters[i].Init(i, 20, 5, 5);
+                _characters[i].Init(i, _rangedAttackRange, _rangedAttackDamage, _healAmount, _characterVerlocity);
 
             }
         }
@@ -51,12 +72,22 @@ public class GameController : MonoBehaviour
             {
                 if (item.Target == null || item.Target.State == Constants.CharacterStates.dead)
                 {
-                    foreach (var target in _characters)
+
+                    RPGCharacterController nearTarget = null;
+                    foreach (var possibleTarget in _characters)
                     {
-                        if (target.State == Constants.CharacterStates.alive
-                                && item.CharacterId != target.CharacterId)
-                            item.SetTarget(target);
+                        if (possibleTarget.State == Constants.CharacterStates.alive
+                                && item.CharacterId != possibleTarget.CharacterId)
+                        {
+
+                            if ((nearTarget == null) || (Vector3.Distance(possibleTarget.transform.position, item.transform.position)<
+                                Vector3.Distance(nearTarget.transform.position, item.transform.position)))
+                                nearTarget = possibleTarget;
+
+                        }
                     }
+
+                    item.SetTarget(nearTarget);
                 }
             }
         }

@@ -18,8 +18,8 @@ public class RPGCharacterController : MonoBehaviour
     private float _attackDamage = 0;
     private float _attackRange = 0;
     private float _healAmount = 0;
+    private float _velocity = 0;
 
-    [SerializeField]
     private Constants.CharacterStates _state = Constants.CharacterStates.alive;
 
     private float _targetDistance;
@@ -74,7 +74,7 @@ public class RPGCharacterController : MonoBehaviour
                 {
                    
                     this.transform.position+=(
-                        this.transform.forward * Time.deltaTime);
+                        this.transform.forward * Time.deltaTime * _velocity);
 
                 }
             }
@@ -124,7 +124,7 @@ public class RPGCharacterController : MonoBehaviour
 
     //Public
 
-    public void Init(int characterId,float attackRange, float attackDamage,float healAmount)
+    public void Init(int characterId,float attackRange, float attackDamage,float healAmount,float velocity)
     {
         _characterId = characterId;
         _health = Constants.MaxCharacterHealth;
@@ -133,6 +133,7 @@ public class RPGCharacterController : MonoBehaviour
         _attackDamage = attackDamage;
         _attackRange = attackRange;
         _healAmount = healAmount;
+        _velocity = velocity;
 
         this.gameObject.name = string.Format("Character({0})",_characterId);
     }
