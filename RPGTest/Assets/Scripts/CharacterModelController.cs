@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using Core;
+
 public class CharacterModelController : MonoBehaviour
 {
     [SerializeField]
@@ -10,12 +12,12 @@ public class CharacterModelController : MonoBehaviour
     [SerializeField]
     GameObject _deadModel;
 
-    RPGCharacterController _characterController;
+    Character _characterController;
 
     // Start is called before the first frame update
     void Start()
     {
-        _characterController = this.GetComponent<RPGCharacterController>();
+        _characterController = this.GetComponent<Character>();
     }
 
     // Update is called once per frame
