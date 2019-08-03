@@ -1,19 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Core;
 using UnityEngine;
 
 public class NonPlayerCharacterController : RPGCharacterController
 {
 
-    private RPGCharacterController _target = null;
+    public Attackable Target { get; set; }
 
     private float _targetDistance;
+    private float AttackDamage { get; set; }
+    private float HealAmount { get; set; }
 
-    
-    public RPGCharacterController Target { get => _target; }
-    
-
-
+  
     // Start is called before the first frame update
     void Start()
     {
@@ -32,98 +31,74 @@ public class NonPlayerCharacterController : RPGCharacterController
 
     private void CalculateTargetDistance()
     {
-        if (_state == Constants.CharacterStates.alive)
+        if (isDead()) return;
+        
+        if (Target != null)
         {
-            if (_target != null)
-            {
-                _targetDistance = Vector3.Distance(this.transform.position, _target.transform.position);
-            }
-            else
-            {
-                _targetDistance = 0;
-            }
+            _targetDistance = Vector3.Distance(this.transform.position, Target.transform.position);
+        }
+        else
+        {
+            _targetDistance = 0;
         }
     }
 
     private void Move()
     {
-        if (_state == Constants.CharacterStates.alive)
-        {
-            if (_target != null)
-            {
-                this.transform.LookAt(_target.transform);
+        if (isDead()) return;
+       
+        if (Target == null) return;
+        
+        this.transform.LookAt(Target.transform);
 
-                if (_targetDistance > _attackRange)
-                {
-                   
-                    this.transform.position+=(
-                        this.transform.forward * Time.deltaTime * _velocity);
-
-                }
-            }
-        }
+        if (_targetDistance <= AttackRange) return;
+           
+        this.transform.position+=(
+            this.transform.forward * Time.deltaTime );
+        
     }
 
     private void AttackEnemy()
     {
-        if (_state == Constants.CharacterStates.alive)
-        {
-            if(_target != null && _target.State == Constants.CharacterStates.alive)
-            {
-                if (_targetDistance <= _attackRange)
-                {
-                    var damage = _attackDamage * Time.deltaTime;
+        if (isDead()) return;
+        
+        if(Target == null || Target.isDead()) return;
+        
+        if (_targetDistance > AttackRange) return;
+        
+        var damage = AttackDamage * Time.deltaTime;
+        DealDamage(Target,damage,_targetDistance);
 
-                    if (this.Level + 5 > _target.Level)
-                        damage *= 1.5f;
-                    else
-                        if (this.Level - 5 < _target.Level)
-                            damage *= 0.5f;
-
-                    _target.ReciveDamage(damage);
-
-                    if (_target.State == Constants.CharacterStates.dead)
-                    {
-                        _level++;
-                        Debug.Log(string.Format("CharacterId({0})-{1}  killed CharacterId({2})-{3} ",
-                            _characterId,_Attacktype.ToString(),_target.CharacterId, _target.Attacktype.ToString()));
-                    }
-                }
-            }
-        }
+        if (!Target.isDead()) return;
+        
+        Level++;
+        Debug.Log(string.Format("{0} killed {1} ",
+            this.gameObject.name,Target.gameObject.name ));
+        
+        
     }
 
     private void HealHimself()
     {
-        if (_state == Constants.CharacterStates.alive)
-        {
-            _health += _healAmount * Time.deltaTime;
-
-            if (_health > Constants.MaxCharacterHealth)
-                _health = Constants.MaxCharacterHealth;
-        }
+        Heal(HealAmount);
     }
   
 
     //Public
 
-    public void Init(int characterId,float attackRange, float attackDamage,float healAmount,float velocity)
+    public void Init(float attackRange, float attackDamage,float healAmount)
     {
-        _characterId = characterId;
-        _health = Constants.MaxCharacterHealth;
-        _state = Constants.CharacterStates.alive;
-        _level = 1;
-        _attackDamage = attackDamage;
-        _attackRange = attackRange;
-        _healAmount = healAmount;
-        _velocity = velocity;
+        Health = Constants.MaxCharacterHealth;
+        Level = 1;
+        AttackDamage = attackDamage;
+        AttackRange = attackRange;
+        HealAmount = healAmount;
 
-        this.gameObject.name = string.Format("Character({0})",_characterId);
     }
 
-    public void SetTarget(NonPlayerCharacterController target)
+    public void SetTarget(Attackable target)
     {
-        _target = target;
+        Target = target;
     }
 
 

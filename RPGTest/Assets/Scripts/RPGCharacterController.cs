@@ -1,54 +1,39 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Core;
 using UnityEngine;
 
-public class RPGCharacterController : MonoBehaviour
+public class RPGCharacterController : Attackable 
 {
 
     [SerializeField]
     protected Constants.CharacterAttackTypes _Attacktype;
+    
+    [SerializeField]
+    public float AttackRange { get; set; }
 
-    protected Constants.CharacterStates _state = Constants.CharacterStates.alive;
+    private IDealDamage dealDamage { get; set; } = new DealDamageBehavior();
+    private IHeal heal { get; set; } = new HealBehavior();
+    
+    
+    
 
-    protected float _health = Constants.MaxCharacterHealth;
-    protected int _level = 1;
-    protected float _attackDamage = 0;
-    protected float _attackRange = 0;
-    protected float _healAmount = 0;
-    protected float _velocity = 0;
-    protected int _characterId;
+    //public float _attackDamage = 0;
 
-    public Constants.CharacterStates State { get => _state; }
-    public int Level { get => _level; }
+ 
+   
     public Constants.CharacterAttackTypes Attacktype { get => _Attacktype; }
-    public int CharacterId { get => _characterId; }
 
-
-    // Start is called before the first frame update
-    void Start()
+    public void DealDamage(Attackable target, float damage, float distance)
     {
-        
+        dealDamage.DealDamage(this, target, damage,distance, AttackRange);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Heal(float health)
     {
-        
+        heal.Heal(this,this, health);
     }
 
-
-    public void ReciveDamage(float damage)
-    {
-        if (_state == Constants.CharacterStates.alive)
-        {
-            _health -= damage;
-
-            if (_health < 0)
-            {
-                _health = 0;
-                _state = Constants.CharacterStates.dead;
-            }
-        }
-    }
 
 }

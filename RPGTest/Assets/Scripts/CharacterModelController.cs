@@ -23,7 +23,7 @@ public class CharacterModelController : MonoBehaviour
     {
         float scale = 1 + ((_characterController.Level-1) * 0.5f);
         this.transform.localScale = Vector3.one * scale;
-        _aliveModel.SetActive(_characterController.State == Constants.CharacterStates.alive);
-        _deadModel.SetActive(_characterController.State == Constants.CharacterStates.dead);
+        _aliveModel.SetActive(!_characterController.isDead());
+        _deadModel.SetActive(_characterController.isDead());
     }
 }

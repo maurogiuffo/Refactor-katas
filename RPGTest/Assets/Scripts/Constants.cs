@@ -4,11 +4,6 @@ using UnityEngine;
 
 public static class Constants 
 {
-    public enum CharacterStates
-    {
-        alive,
-        dead
-    }
 
     public enum CharacterAttackTypes
     {
@@ -18,6 +13,7 @@ public static class Constants
 
    
     public const float MaxCharacterHealth = 1000;
+    public const float MaxHouseHealth = 2000;
 
 
 }
