@@ -52,7 +52,7 @@ public class GameController : MonoBehaviour
         
         for (int i = 0; i < _characters.Count; i++)
         {
-            if(_characters[i].Attacktype == Constants.CharacterAttackTypes.melee)
+            if(_characters[i].AttackType == Constants.CharacterAttackTypes.melee)
             {
                 _characters[i].Init(_meleeAttackRange,_meleeAttackDamage,_healAmount);
             }

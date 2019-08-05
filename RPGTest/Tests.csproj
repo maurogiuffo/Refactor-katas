@@ -59,8 +59,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Core\Tests\Iteration1_CharacterTest.cs" />
-    <None Include="Assets\Scripts\Core\Tests\Tests.asmdef" />
+    <Compile Include="Assets\Scripts\Tests\Iteration1CharacterTest.cs" />
+    <Compile Include="Assets\Scripts\Tests\Iteration2CharacterTest.cs" />
+    <Compile Include="Assets\Scripts\Tests\Iteration3CharacterTest.cs" />
+    <Compile Include="Assets\Scripts\Tests\Iteration4Test.cs" />
+    <None Include="Assets\Scripts\Tests\Tests.asmdef" />
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.1.11f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
     </Reference>

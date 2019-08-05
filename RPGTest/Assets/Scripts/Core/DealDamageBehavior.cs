@@ -2,9 +2,9 @@ using System;
 
 namespace Core
 {
-    public class DealDamageBehavior : IDealDamage
+    public class DealDamageBehavior
     {
-        void IDealDamage.DealDamage(Attackable attacker, Attackable target, float damage, float distance,float range)
+        public void DealDamage(Attackable attacker, Attackable target, float damage, float distance,float range)
         {
             if(attacker == target) return;
             if(distance > range) return;

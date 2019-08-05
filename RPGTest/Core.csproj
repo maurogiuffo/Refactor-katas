@@ -65,8 +65,6 @@
     <Compile Include="Assets\Scripts\Core\DealDamageBehavior.cs" />
     <Compile Include="Assets\Scripts\Core\HealBehavior.cs" />
     <Compile Include="Assets\Scripts\Core\House.cs" />
-    <Compile Include="Assets\Scripts\Core\IDealDamage.cs" />
-    <Compile Include="Assets\Scripts\Core\IHeal.cs" />
     <Compile Include="Assets\Scripts\Core\Tree.cs" />
     <None Include="Assets\Scripts\Core\Core.asmdef" />
     <Reference Include="UnityEngine.AIModule">

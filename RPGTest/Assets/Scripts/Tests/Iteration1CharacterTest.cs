@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
-
 using Core;
 
 namespace Tests
 {
-    public class Iteration1_CharacterTest
+    public class Iteration1CharacterTest
     {
        
         [Test]
-        public void CharacterStart_Health_Level()
+        public void CharacterStartHealthLevel()
         {
             var character = new GameObject().AddComponent<Character>();
             
@@ -25,20 +24,20 @@ namespace Tests
         
           
         [Test]
-        public void Character_Can_Be_Dead_Alive()
+        public void CharacterCanBeDeadAlive()
         {
             var character = new GameObject().AddComponent<Character>();
             
             character.Init();
-
             Assert.AreEqual( false,character.isDead());
+
             character.Health = 0;
             Assert.AreEqual(true,character.isDead());
         }
         
         
         [Test]
-        public void Character_Can_DealDamage_Heal()
+        public void CharacterCanDealDamageHeal()
         {
             var character = new GameObject().AddComponent<Character>();
             var target = new GameObject().AddComponent<Character>();
@@ -46,19 +45,17 @@ namespace Tests
             character.Init();
             target.Init();
             
-            var expectedHealth = target.Health;
             character.DealDamage(target,10,0);
-            Assert.AreNotEqual(expectedHealth,target.Health );
+            Assert.AreEqual(990,target.Health );
 
             character.Health = 500 ;
-            expectedHealth = character.Health;
             character.Heal(100);
-            Assert.AreNotEqual(expectedHealth, character.Health);
+            Assert.AreEqual(600, character.Health);
         }
         
         
         [Test]
-        public void Character_Can_Die()
+        public void CharacterCanDie()
         {
             var character = new GameObject().AddComponent<Character>();
             var target = new GameObject().AddComponent<Character>();
@@ -67,12 +64,11 @@ namespace Tests
             target.Init();
             
             character.DealDamage(target,2000,0);
-            Assert.AreNotEqual(0, character.Health);
-            Assert.AreNotEqual(true, character.isDead());
+            Assert.AreEqual(true, target.isDead());
         }
         
         [Test]
-        public void Character_Dead_Cannot_Be_Healed()
+        public void CharacterDeadCannotBeHealed()
         {
             var character = new GameObject().AddComponent<Character>();
             var target = new GameObject().AddComponent<Character>();
@@ -82,20 +78,18 @@ namespace Tests
             
             character.DealDamage(target,2000,0);
             target.Heal(1000);
-            Assert.AreNotEqual(1000, target.Health);
+            Assert.AreEqual(0, target.Health);
         }
 
         [Test]
-        public void Character_Cannot_Be_Healed_Over_1000()
+        public void CharacterCannotBeHealedOver1000()
         {
             var character = new GameObject().AddComponent<Character>();
-            var target = new GameObject().AddComponent<Character>();
             
             character.Init();
-            target.Init();
             
-            target.Heal(100);
-            Assert.AreEqual(false, target.Health > 1000);
+            character.Heal(100);
+            Assert.AreEqual(false, character.Health > 1000);
         }
 
         

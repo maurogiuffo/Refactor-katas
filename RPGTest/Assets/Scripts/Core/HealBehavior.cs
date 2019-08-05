@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Core
 {
-    public class HealBehavior : IHeal
+    public class HealBehavior 
     {
         public void Heal(Attackable healer, Attackable target, float health)
         {
