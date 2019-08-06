@@ -20,7 +20,7 @@ namespace Core
          
         }
 
-        [SerializeField]
+   
         public float AttackRange { get; set; }
      
 
@@ -31,6 +31,7 @@ namespace Core
         public void Init()
         {
             base.Init(Constants.MaxCharacterHealth,1);
+            SetAttackType(attackType);
         }
         
         public void SetAttackType(Constants.CharacterAttackTypes attackType)

@@ -27,7 +27,7 @@ public class GameController : MonoBehaviour
     private float _healAmount = 5;
 
 
-    List<NonPlayerCharacterController> _characters = null;
+    private List<NonPlayerCharacterController> Characters { get; set; }
 
 
 
@@ -47,21 +47,23 @@ public class GameController : MonoBehaviour
     void Init()
     {
         var characters = GameObject.FindObjectsOfType<NonPlayerCharacterController>();
-        _characters = new List<NonPlayerCharacterController>(characters);
+        Characters = new List<NonPlayerCharacterController>(characters);
 
         
-        for (int i = 0; i < _characters.Count; i++)
+        for (int i = 0; i < Characters.Count; i++)
         {
-            if(_characters[i].AttackType == Constants.CharacterAttackTypes.melee)
+            if(Characters[i].AttackType == Constants.CharacterAttackTypes.melee)
             {
-                _characters[i].Init(_meleeAttackRange,_meleeAttackDamage,_healAmount);
+                Characters[i].Init(_meleeAttackDamage,_healAmount);
             }
             else
             {
-                _characters[i].Init(_rangedAttackRange, _rangedAttackDamage, _healAmount);
+                Characters[i].Init( _rangedAttackDamage, _healAmount);
 
             }
         }
+
+        FindObjectOfType<PlayerCharacterController>().Init();
 
         Debug.Log("Characters initialized.");
 
@@ -69,14 +71,14 @@ public class GameController : MonoBehaviour
 
     void SetTargets()
     {
-        foreach (var item in _characters)
+        foreach (var item in Characters)
         {
             if (item.isDead()) continue;
             
             if ( !object.Equals(item.Target,null) && !item.Target.isDead()) continue;
 
             NonPlayerCharacterController nearTarget = null;
-            foreach (var possibleTarget in _characters)
+            foreach (var possibleTarget in Characters)
             {
                 if (possibleTarget.isDead() || object.Equals(item,possibleTarget)) continue;
 

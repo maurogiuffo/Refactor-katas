@@ -46,7 +46,6 @@ public class NonPlayerCharacterController : Character
     private void Move()
     {
         if (isDead()) return;
-       
         if (Target == null) return;
         
         this.transform.LookAt(Target.transform);
@@ -61,10 +60,7 @@ public class NonPlayerCharacterController : Character
     private void AttackEnemy()
     {
         if (isDead()) return;
-        
         if(Target == null || Target.isDead()) return;
-        
-        if (_targetDistance > AttackRange) return;
         
         var damage = AttackDamage * Time.deltaTime;
         DealDamage(Target,damage,_targetDistance);
@@ -80,20 +76,17 @@ public class NonPlayerCharacterController : Character
 
     private void HealHimself()
     {
-        Heal(HealAmount);
+        Heal(HealAmount * Time.deltaTime);
     }
   
 
     //Public
 
-    public void Init(float attackRange, float attackDamage,float healAmount)
+    public void Init( float attackDamage,float healAmount)
     {
-        Health = Constants.MaxCharacterHealth;
-        Level = 1;
         AttackDamage = attackDamage;
-        AttackRange = attackRange;
         HealAmount = healAmount;
-
+        base.Init();
     }
 
     public void SetTarget(Attackable target)
