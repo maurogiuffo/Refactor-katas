@@ -49,7 +49,7 @@ namespace csharp
             if (item.SellIn < 0)
                 item.Quality = item.Quality - 2;
             
-            SetQualityLimits(item);
+            ApplyQualityLimits(item);
         }
 
         private void UpdateQualityBackstagePasses(Item item)
@@ -66,7 +66,7 @@ namespace csharp
             if (item.SellIn < 0)
                  item.Quality = 0;
             
-            SetQualityLimits(item);
+            ApplyQualityLimits(item);
         }
         
         private void UpdateAgedBrie(Item item)
@@ -78,15 +78,8 @@ namespace csharp
             if (item.SellIn < 0)
                 item.Quality = item.Quality + 1;
                  
-            SetQualityLimits(item);
+            ApplyQualityLimits(item);
         }
-
-        private static void SetQualityLimits(Item item)
-        {
-            item.Quality = Math.Min(50, item.Quality);
-            item.Quality = Math.Max(0, item.Quality);
-        }
-
 
         private void UpdateSulfuras(Item item)
         {
@@ -101,9 +94,15 @@ namespace csharp
             if (item.SellIn < 0)
                 item.Quality = item.Quality - 1;
 
-            SetQualityLimits(item);
+            ApplyQualityLimits(item);
        }
         
         
+        private static void ApplyQualityLimits(Item item)
+        {
+            item.Quality = Math.Min(50, item.Quality);
+            item.Quality = Math.Max(0, item.Quality);
+        }
+
     }
 }
