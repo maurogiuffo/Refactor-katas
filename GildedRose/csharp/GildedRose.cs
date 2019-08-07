@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace csharp
 {
@@ -18,91 +17,104 @@ namespace csharp
                 UpdateItemQuality(Items[i]);
             }
         }
-        
+
         private void UpdateItemQuality(Item item)
         {
-            switch (item.Name)
+
+            if (item.Name != "Aged Brie" && item.Name != "Backstage passes to a TAFKAL80ETC concert")
             {
-                case "Sulfuras, Hand of Ragnaros":
-                    UpdateSulfuras(item);
-                    break;
-                case "Aged Brie":
-                    UpdateAgedBrie(item);
-                    break;
-                case "Backstage passes to a TAFKAL80ETC concert":
-                    UpdateQualityBackstagePasses(item);
-                    break;
-                case "Conjured Mana Cake":
-                    UpdateQualityConjured(item);
-                    break;
-                default:
-                    UpdateNormalItem(item);
-                    break;
+                if (item.Quality > 0)
+                {
+                    if (item.Name != "Sulfuras, Hand of Ragnaros")
+                    {
+                        if (item.Name != "Conjured Mana Cake")
+                        {
+                            item.Quality = item.Quality - 1;
+                        }
+                        else
+                        {
+                            if (item.Quality > 1)
+                                item.Quality = item.Quality - 2;
+                        }
+                    }
+                }
             }
-        }
-        
-        private void UpdateQualityConjured(Item item)
-        {
-            item.SellIn = item.SellIn - 1;
-            item.Quality = item.Quality - 2;
+            else
+            {
+                if (item.Quality < 50)
+                {
+                    item.Quality = item.Quality + 1;
+
+                    if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
+                    {
+                        if (item.SellIn < 11)
+                        {
+                            if (item.Quality < 50)
+                            {
+                                item.Quality = item.Quality + 1;
+                            }
+                        }
+
+                        if (item.SellIn < 6)
+                        {
+                            if (item.Quality < 50)
+                            {
+                                item.Quality = item.Quality + 1;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (item.Name != "Sulfuras, Hand of Ragnaros")
+            {
+                item.SellIn = item.SellIn - 1;
+            }
 
             if (item.SellIn < 0)
-                item.Quality = item.Quality - 2;
+            {
+                if (item.Name != "Aged Brie")
+                {
+                    if (item.Name != "Backstage passes to a TAFKAL80ETC concert")
+                    {
+                        if (item.Quality > 0)
+                        {
+                            if (item.Name != "Sulfuras, Hand of Ragnaros")
+                            {
+                                if (item.Name != "Conjured Mana Cake")
+                                {
+                                    item.Quality = item.Quality - 1;
+                                }
+                                else
+                                {
+                                    if (item.Quality > 1)
+                                        item.Quality = item.Quality - 2;
+                                }
+                                
+                            }
+                        
+                        }
+                    }
+                    else
+                    {
+                        item.Quality = item.Quality - item.Quality;
+                    }
+                }
+                else
+                {
+                    if (item.Quality < 50)
+                    {
+                        item.Quality = item.Quality + 1;
+                    }
+                }
+            }
             
-            item.Quality = Math.Min(50, item.Quality);
-            item.Quality = Math.Max(0, item.Quality);
+            if (item.Quality > 50 && item.Name != "Sulfuras, Hand of Ragnaros")
+                item.Quality = 50;
+
+            if (item.Quality < 0)
+                item.Quality = 0;
+
         }
-
-        private void UpdateQualityBackstagePasses(Item item)
-        {
-            item.SellIn = item.SellIn - 1;
-            item.Quality = item.Quality + 1;
-
-            if (item.SellIn < 10)
-                item.Quality = item.Quality + 1;
-
-            if (item.SellIn < 5)
-                item.Quality = item.Quality + 1;
-
-            if (item.SellIn < 0)
-                 item.Quality = 0;
-            
-            item.Quality = Math.Min(50, item.Quality);
-            item.Quality = Math.Max(0, item.Quality);
-                
-        }
-        
-        private void UpdateAgedBrie(Item item)
-        {
-
-            item.SellIn = item.SellIn - 1;
-            item.Quality = item.Quality + 1;
-
-            if (item.SellIn < 0)
-                item.Quality = item.Quality + 1;
-                 
-            item.Quality = Math.Min(50, item.Quality);
-            item.Quality = Math.Max(0, item.Quality);
-        }
-        
-        
-        private void UpdateSulfuras(Item item)
-        {
-            item.Quality = Math.Max(0, item.Quality);
-        }
-
-        private void UpdateNormalItem(Item item)
-        {
-            item.SellIn = item.SellIn - 1;
-            item.Quality = item.Quality - 1;
-            
-            if (item.SellIn < 0)
-                item.Quality = item.Quality - 1;
-
-            item.Quality = Math.Min(50, item.Quality);
-            item.Quality = Math.Max(0, item.Quality);
-       }
-        
-        
     }
 }
