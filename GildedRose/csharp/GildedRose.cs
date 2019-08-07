@@ -5,7 +5,7 @@ namespace csharp
 {
     public class GildedRose
     {
-        IList<Item> Items;
+        readonly IList<Item> Items;
         public GildedRose(IList<Item> Items)
         {
             this.Items = Items;
@@ -62,9 +62,9 @@ namespace csharp
         }
 
 
-        private int DecreaseSellIn(int i)
+        private void DecreaseSellIn(int i)
         {
-            return Items[i].SellIn = Items[i].SellIn - 1;
+            Items[i].SellIn = Items[i].SellIn - 1;
         }
 
         private int GetBackstageIncreaseQualityValue(int i)
