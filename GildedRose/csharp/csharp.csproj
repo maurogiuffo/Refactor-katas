@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="ApprovalTest.cs" />
     <Compile Include="GildedRose.cs" />
+    <Compile Include="GildedRoseRefactoredOLDV2.cs" />
     <Compile Include="GildedRoseTest.cs" />
     <Compile Include="GildedRoseRefactoredOLD.cs" />
     <Compile Include="Item.cs" />
