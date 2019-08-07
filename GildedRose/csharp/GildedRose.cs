@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace csharp
 {
@@ -14,107 +15,70 @@ namespace csharp
         {
             for (var i = 0; i < Items.Count; i++)
             {
+                var isBackstage = Items[i].Name == "Backstage passes to a TAFKAL80ETC concert";
+                var isAgedBrie = Items[i].Name == "Aged Brie";
+                var isSulfuras = Items[i].Name == "Sulfuras, Hand of Ragnaros";
+                var isConjured = Items[i].Name == "Conjured Mana Cake";
                 
-                
-                if (Items[i].Name != "Aged Brie" && Items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
+                if (isSulfuras) continue;
+
+                if (isAgedBrie)
                 {
-                    
-                    
-                    
-                    
-                    
-                    if (Items[i].Quality > 0)
-                    {
-                        if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-                        {
-                            if (Items[i].Name != "Conjured Mana Cake")
-                            {
-                                Items[i].Quality = Items[i].Quality - 1;
-                            }
-                            else
-                            {
-                                if(Items[i].Quality > 1)
-                                    Items[i].Quality = Items[i].Quality - 2;
-                            }
-                        }
-                    }
+                    IncreaseQualityBy(i,1);
                 }
                 else
                 {
-                    if (Items[i].Quality < 50)
+                    if (isBackstage)
                     {
-                        Items[i].Quality = Items[i].Quality + 1;
-
-                        if (Items[i].Name == "Backstage passes to a TAFKAL80ETC concert")
-                        {
-                            if (Items[i].SellIn < 11)
-                            {
-                                if (Items[i].Quality < 50)
-                                {
-                                    Items[i].Quality = Items[i].Quality + 1;
-                                }
-                            }
-
-                            if (Items[i].SellIn < 6)
-                            {
-                                if (Items[i].Quality < 50)
-                                {
-                                    Items[i].Quality = Items[i].Quality + 1;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-                {
-                    Items[i].SellIn = Items[i].SellIn - 1;
-                }
-
-                if (Items[i].SellIn < 0)
-                {
-                    if (Items[i].Name != "Aged Brie")
-                    {
-                        if (Items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
-                        {
-                            if (Items[i].Quality > 0)
-                            {
-                                if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-                                {
-                                    if (Items[i].Name != "Conjured Mana Cake")
-                                    {
-                                        Items[i].Quality = Items[i].Quality - 1;
-                                    }
-                                    else
-                                    {
-                                        if (Items[i].Quality > 1)
-                                            Items[i].Quality = Items[i].Quality - 2;
-                                    }                                
-                                }
-                            }
-                        }
-                        else
-                        {
-                            Items[i].Quality = Items[i].Quality - Items[i].Quality;
-                        }
+                        IncreaseQualityBy(i,GetBackstageIncreaseQualityValue(i));
                     }
                     else
                     {
-                        if (Items[i].Quality < 50)
-                        {
-                            Items[i].Quality = Items[i].Quality + 1;
-                        }
+                        DecreaseQualityBy(i, isConjured ? 2 : 1);
                     }
                 }
-                
-                
-                if (Items[i].Quality > 50 && Items[i].Name !="Sulfuras, Hand of Ragnaros")
-                    Items[i].Quality = 50;
-                
-                if (Items[i].Quality < 0)
-                    Items[i].Quality = 0;
+
+                DecreaseSellIn(i);
+
+                if (Items[i].SellIn >= 0) continue;
+                   
+                if (isAgedBrie)
+                {
+                    IncreaseQualityBy(i,1);
+                }
+                else
+                {
+                    if (isBackstage)
+                    {                        
+                        DecreaseQualityBy(i,Items[i].Quality);
+                    }
+                    else
+                    { 
+                        DecreaseQualityBy(i, isConjured ? 2 : 1);
+                    }
+                }
 
             }
+        }
+
+        private int DecreaseSellIn(int i)
+        {
+            return Items[i].SellIn = Items[i].SellIn - 1;
+        }
+
+        private int GetBackstageIncreaseQualityValue(int i)
+        {
+            return Items[i].SellIn < 6? 3 : Items[i].SellIn < 11 ? 2 : 1;
+        }
+
+        private void DecreaseQualityBy(int index,int value)
+        {
+            Items[index].Quality = Math.Max( Items[index].Quality - value,0);
+        }
+
+        private void IncreaseQualityBy(int index,int value)
+        {
+            Items[index].Quality = Math.Min( Items[index].Quality + value, 50);
         }
     }
 }
