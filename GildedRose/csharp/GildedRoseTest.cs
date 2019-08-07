@@ -6,15 +6,7 @@ namespace csharp
     [TestFixture]
     public class GildedRoseTest
     {
-        [Test]
-        public void foo()
-        {
-            IList<Item> Items = new List<Item> { new Item { Name = "foo", SellIn = 0, Quality = 0 } };
-            GildedRose app = new GildedRose(Items);
-            app.UpdateQuality();
-            Assert.AreEqual("foo", Items[0].Name);
-        }
-
+       
         [Test]
         public void LowerItemValues()
         {
@@ -165,6 +157,17 @@ namespace csharp
             }
         }
         
-     
+        [Test]
+        public void ConjuredDegradeQualityTwiceAsFastLower0()
+        {
+            IList<Item> Items = new List<Item> { new Item { Name = "Conjured Mana Cake", SellIn = -1, Quality = 10 } };
+            GildedRose app = new GildedRose(Items);
+            app.UpdateQuality();
+
+            foreach (var item in Items)
+            {
+                Assert.AreEqual(6, item.Quality);
+            }
+        }
     }
 }

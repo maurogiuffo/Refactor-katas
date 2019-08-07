@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace csharp
 {
@@ -14,96 +15,94 @@ namespace csharp
         {
             for (var i = 0; i < Items.Count; i++)
             {
-                
-                if (Items[i].Quality > 50 && Items[i].Name !="Sulfuras, Hand of Ragnaros")
-                    Items[i].Quality = 50;
-                
-                if (Items[i].Quality < 0)
-                    Items[i].Quality = 0;
-                
-                if (Items[i].Name != "Aged Brie" && Items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
-                {
-                    
-                    
-                    
-                    
-                    
-                    if (Items[i].Quality > 0)
-                    {
-                        if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-                        {
-                            if (Items[i].Name != "Conjured Mana Cake")
-                            {
-                                Items[i].Quality = Items[i].Quality - 1;
-                            }
-                            else
-                            {
-                                if(Items[i].Quality > 1)
-                                    Items[i].Quality = Items[i].Quality - 2;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    if (Items[i].Quality < 50)
-                    {
-                        Items[i].Quality = Items[i].Quality + 1;
-
-                        if (Items[i].Name == "Backstage passes to a TAFKAL80ETC concert")
-                        {
-                            if (Items[i].SellIn < 11)
-                            {
-                                if (Items[i].Quality < 50)
-                                {
-                                    Items[i].Quality = Items[i].Quality + 1;
-                                }
-                            }
-
-                            if (Items[i].SellIn < 6)
-                            {
-                                if (Items[i].Quality < 50)
-                                {
-                                    Items[i].Quality = Items[i].Quality + 1;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-                {
-                    Items[i].SellIn = Items[i].SellIn - 1;
-                }
-
-                if (Items[i].SellIn < 0)
-                {
-                    if (Items[i].Name != "Aged Brie")
-                    {
-                        if (Items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
-                        {
-                            if (Items[i].Quality > 0)
-                            {
-                                if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-                                {
-                                    Items[i].Quality = Items[i].Quality - 1;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            Items[i].Quality = Items[i].Quality - Items[i].Quality;
-                        }
-                    }
-                    else
-                    {
-                        if (Items[i].Quality < 50)
-                        {
-                            Items[i].Quality = Items[i].Quality + 1;
-                        }
-                    }
-                }
+                UpdateItemQuality(Items[i]);
             }
         }
+        
+        private void UpdateItemQuality(Item item)
+        {
+            switch (item.Name)
+            {
+                case "Sulfuras, Hand of Ragnaros":
+                    UpdateSulfuras(item);
+                    break;
+                case "Aged Brie":
+                    UpdateAgedBrie(item);
+                    break;
+                case "Backstage passes to a TAFKAL80ETC concert":
+                    UpdateQualityBackstagePasses(item);
+                    break;
+                case "Conjured Mana Cake":
+                    UpdateQualityConjured(item);
+                    break;
+                default:
+                    UpdateNormalItem(item);
+                    break;
+            }
+        }
+        
+        private void UpdateQualityConjured(Item item)
+        {
+            item.SellIn = item.SellIn - 1;
+            item.Quality = item.Quality - 2;
+
+            if (item.SellIn < 0)
+                item.Quality = item.Quality - 2;
+            
+            item.Quality = Math.Min(50, item.Quality);
+            item.Quality = Math.Max(0, item.Quality);
+        }
+
+        private void UpdateQualityBackstagePasses(Item item)
+        {
+            item.SellIn = item.SellIn - 1;
+            item.Quality = item.Quality + 1;
+
+            if (item.SellIn < 10)
+                item.Quality = item.Quality + 1;
+
+            if (item.SellIn < 5)
+                item.Quality = item.Quality + 1;
+
+            if (item.SellIn < 0)
+                 item.Quality = 0;
+            
+            item.Quality = Math.Min(50, item.Quality);
+            item.Quality = Math.Max(0, item.Quality);
+                
+        }
+        
+        private void UpdateAgedBrie(Item item)
+        {
+
+            item.SellIn = item.SellIn - 1;
+            item.Quality = item.Quality + 1;
+
+            if (item.SellIn < 0)
+                item.Quality = item.Quality + 1;
+                 
+            item.Quality = Math.Min(50, item.Quality);
+            item.Quality = Math.Max(0, item.Quality);
+        }
+        
+        
+        private void UpdateSulfuras(Item item)
+        {
+            item.Quality = Math.Max(0, item.Quality);
+        }
+
+        private void UpdateNormalItem(Item item)
+        {
+            item.SellIn = item.SellIn - 1;
+            item.Quality = item.Quality - 1;
+            
+            if (item.SellIn < 0)
+                item.Quality = item.Quality - 1;
+
+            item.Quality = Math.Min(50, item.Quality);
+            item.Quality = Math.Max(0, item.Quality);
+       }
+        
+        
     }
 }
