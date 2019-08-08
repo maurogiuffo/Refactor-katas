@@ -24,43 +24,59 @@ namespace csharp
 
                 if (isAgedBrie)
                 {
-                    IncreaseQualityBy(i,1);
-                }
-                else
-                {
-                    if (isBackstage)
-                    {
-                        IncreaseQualityBy(i,GetBackstageIncreaseQualityValue(i));
-                    }
-                    else
-                    {
-                        DecreaseQualityBy(i, isConjured ? 2 : 1);
-                    }
+                    UpdateAgedBrie(i);
+                    continue;
                 }
 
-                DecreaseSellIn(i);
-
-                if (Items[i].SellIn >= 0) continue;
-                   
-                if (isAgedBrie)
+                if (isBackstage)
                 {
-                    IncreaseQualityBy(i,1);
-                }
-                else
-                {
-                    if (isBackstage)
-                    {                        
-                        DecreaseQualityBy(i,Items[i].Quality);
-                    }
-                    else
-                    { 
-                        DecreaseQualityBy(i, isConjured ? 2 : 1);
-                    }
+                    UpdateBackstage(i);
+                    continue;
                 }
 
+                if (isConjured)
+                {
+                    UpdateConjured(i);
+                    continue;
+                }
+                
+                UpdateNormal(i);
             }
+
         }
 
+
+        private void UpdateAgedBrie(int i)
+        {
+            IncreaseQualityBy(i,1);
+            DecreaseSellIn(i);
+            if (Items[i].SellIn >= 0) return;
+            IncreaseQualityBy(i,1);
+        }
+        
+        private void UpdateBackstage(int i)
+        {
+            IncreaseQualityBy(i,GetBackstageIncreaseQualityValue(i));
+            DecreaseSellIn(i);
+            if (Items[i].SellIn >= 0) return;
+            DecreaseQualityBy(i,Items[i].Quality);
+        }
+        
+        private void UpdateConjured(int i)
+        {
+            DecreaseQualityBy(i, 2);
+            DecreaseSellIn(i);
+            if (Items[i].SellIn >= 0)  return ;
+            DecreaseQualityBy(i, 2);
+        }
+
+        private void UpdateNormal(int i)
+        {
+            DecreaseQualityBy(i, 1);
+            DecreaseSellIn(i);
+            if (Items[i].SellIn >= 0)  return ;
+            DecreaseQualityBy(i, 1);
+        }
 
         private void DecreaseSellIn(int i)
         {
