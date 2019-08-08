@@ -15,59 +15,63 @@ namespace csharp
         {
             for (var i = 0; i < Items.Count; i++)
             {
-                var isBackstage = Items[i].Name == "Backstage passes to a TAFKAL80ETC concert";
-                var isAgedBrie = Items[i].Name == "Aged Brie";
-                var isSulfuras = Items[i].Name == "Sulfuras, Hand of Ragnaros";
-                var isConjured = Items[i].Name == "Conjured Mana Cake";
-                
-                if (isSulfuras) continue;
-
-                if (isAgedBrie)
-                {
-                    UpdateAgedBrie(i);
-                    continue;
-                }
-
-                if (isBackstage)
-                {
-                    UpdateBackstage(i);
-                    continue;
-                }
-
-                if (isConjured)
-                {
-                    UpdateConjured(i);
-                    continue;
-                }
-                
+                if(IsSulfuras(i)) continue;
+                if(UpdateAgedBrie(i)) continue;
+                if(UpdateBackstage(i)) continue;
+                if(UpdateConjured(i)) continue;
                 UpdateNormal(i);
             }
-
-        }
-
-
-        private void UpdateAgedBrie(int i)
-        {
-            IncreaseQualityBy(i,1);
-            DecreaseSellIn(i);
-            if (Items[i].SellIn >= 0) return;
-            IncreaseQualityBy(i,1);
         }
         
-        private void UpdateBackstage(int i)
+        private bool IsAgedBrie(int i)
         {
+            return Items[i].Name == "Aged Brie";
+        }
+        
+        private bool IsConjured(int i)
+        {
+            return Items[i].Name == "Conjured Mana Cake";
+        }
+
+        private bool IsSulfuras(int i)
+        {
+            return Items[i].Name == "Sulfuras, Hand of Ragnaros";
+        }
+
+        private bool IsBackstage(int i)
+        {
+            return Items[i].Name == "Backstage passes to a TAFKAL80ETC concert";
+        }
+
+        private bool UpdateAgedBrie(int i)
+        {
+            if (!IsAgedBrie(i)) return false;
+            IncreaseQualityBy(i,1);
+            DecreaseSellIn(i);
+            if (Items[i].SellIn >= 0) return true;
+            IncreaseQualityBy(i,1);
+            return true;
+        }
+
+
+        private bool UpdateBackstage(int i)
+        {
+            if (!IsBackstage(i)) return false;
             IncreaseQualityBy(i,GetBackstageIncreaseQualityValue(i));
             DecreaseSellIn(i);
-            if (Items[i].SellIn >= 0) return;
+            if (Items[i].SellIn >= 0) return true;
             DecreaseQualityBy(i,Items[i].Quality);
+            return true;
         }
         
-        private void UpdateConjured(int i)
+        private bool UpdateConjured(int i)
         {
+            if(!IsConjured(i)) return false;
             DecreaseQualityBy(i, 2);
             DecreaseSellIn(i);
-            if (Items[i].SellIn >= 0)  return ;
+            if (Items[i].SellIn >= 0)  return true ;
             DecreaseQualityBy(i, 2);
+            return true;
         }
 
         private void UpdateNormal(int i)
